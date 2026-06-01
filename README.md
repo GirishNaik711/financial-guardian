@@ -10,3 +10,5 @@ A comprehensive financial monitoring and alerting system for Indian markets.
 - **Briefings**: Morning briefings and end-of-day wrap-ups
 - **Data Pipeline**: Aggregate data from multiple sources (StockInsights, Perplexity, NewsAPI, AMFI, NSE RSS)
 
+#Begin
+
