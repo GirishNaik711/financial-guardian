@@ -1,0 +1,21 @@
+# Manual bond holdings (Wint Wealth stub)
+# Update manually when bond holdings change
+
+bonds:
+  - issuer_name: "UPDATE_WITH_YOUR_ISSUER_1"
+    instrument_name: "UPDATE_WITH_YOUR_BOND_NAME_1"
+    isin: "UPDATE_WITH_ISIN_1"
+    face_value: 1000
+    coupon_rate: 0.095
+    maturity_date: "2027-03-31"
+    current_value: 1000
+    quantity: 1
+
+  - issuer_name: "UPDATE_WITH_YOUR_ISSUER_2"
+    instrument_name: "UPDATE_WITH_YOUR_BOND_NAME_2"
+    isin: "UPDATE_WITH_ISIN_2"
+    face_value: 1000
+    coupon_rate: 0.092
+    maturity_date: "2026-09-30"
+    current_value: 1000
+    quantity: 1

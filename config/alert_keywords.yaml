@@ -1,0 +1,35 @@
+# Keywords that trigger urgent alerts when found in news text
+# Case-insensitive matching
+# Organized by severity
+
+critical:
+  - "fraud"
+  - "SEBI action"
+  - "ED raid"
+  - "promoter arrested"
+  - "insolvency"
+  - "default"
+  - "trading halt"
+  - "trading suspended"
+  - "fund suspended"
+  - "redemption suspended"
+  - "circuit breaker"
+  - "emergency announcement"
+  - "promoter pledge increase"
+  - "NCLT"
+  - "liquidation"
+
+warning:
+  - "fund manager change"
+  - "CEO resigned"
+  - "CFO resigned"
+  - "promoter selling"
+  - "SEBI notice"
+  - "income tax raid"
+  - "regulatory action"
+  - "rights issue"
+  - "merger"
+  - "acquisition"
+  - "open offer"
+  - "delisting"
+  - "rating downgrade"

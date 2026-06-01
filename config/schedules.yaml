@@ -1,0 +1,73 @@
+# All job schedules in IST
+# Format: cron expressions or interval in minutes
+
+jobs:
+  holdings_sync_morning:
+    schedule: "cron"
+    hour: 7
+    minute: 0
+    description: "Sync holdings from Kite and Groww before morning briefing"
+
+  holdings_sync_eod:
+    schedule: "cron"
+    hour: 16
+    minute: 0
+    description: "Sync holdings after market close"
+
+  morning_briefing:
+    schedule: "cron"
+    hour: 7
+    minute: 30
+    description: "Generate and send morning briefing to Slack"
+
+  eod_wrap:
+    schedule: "cron"
+    hour: 15
+    minute: 35
+    description: "Generate and send end-of-day wrap to Slack"
+
+  filings_poll:
+    schedule: "interval"
+    minutes: 15
+    description: "Poll StockInsights for new BSE/NSE filings"
+    market_hours_only: true
+
+  news_poll:
+    schedule: "interval"
+    minutes: 240
+    description: "Poll Perplexity and NewsAPI for news"
+
+  nse_rss_poll:
+    schedule: "interval"
+    minutes: 30
+    description: "Poll NSE RSS feeds"
+    market_hours_only: true
+
+  alert_check:
+    schedule: "interval"
+    minutes: 15
+    description: "Check all alert trigger conditions"
+    market_hours_only: true
+
+  nav_fetch:
+    schedule: "cron"
+    hour: 21
+    minute: 0
+    description: "Fetch latest NAV from AMFI after 9pm"
+
+  watchlist_sync:
+    schedule: "cron"
+    hour: 6
+    minute: 45
+    description: "Sync watchlist from Google Sheets"
+
+  market_context_build:
+    schedule: "cron"
+    hour: 7
+    minute: 15
+    description: "Build market context before morning briefing"
+
+  health_check:
+    schedule: "interval"
+    minutes: 30
+    description: "Check all system components are operational"
