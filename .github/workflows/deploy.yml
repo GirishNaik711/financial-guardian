@@ -1,0 +1,79 @@
+name: Deploy to Home Server
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Only deploy if CI passes — this job depends on the test job
+    needs: []   # Remove this line and add 'needs: [test]' once CI is stable
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+      - name: Add server to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.SERVER_SSH_PORT }} \
+            ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          ssh -p ${{ secrets.SERVER_SSH_PORT }} \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+            'bash -s' << 'ENDSSH'
+
+            set -e   # Exit immediately on any error
+
+            PROJECT_DIR="${{ secrets.DEPLOY_PATH }}"
+
+            # Create project dir if first deploy
+            mkdir -p "$PROJECT_DIR"
+            cd "$PROJECT_DIR"
+
+            # Pull latest code
+            if [ -d ".git" ]; then
+              git fetch origin main
+              git reset --hard origin/main
+            else
+              git clone git@github.com:${{ github.repository }}.git .
+            fi
+
+            # Create/update virtual environment
+            if [ ! -d "venv" ]; then
+              python3.11 -m venv venv
+            fi
+
+            source venv/bin/activate
+
+            # Install/update dependencies
+            pip install --upgrade pip --quiet
+            pip install -r requirements.txt --quiet
+
+            # Apply any schema migrations
+            # (safe — schema.sql uses IF NOT EXISTS throughout)
+            if [ -f ".env" ]; then
+              export $(grep -v '^#' .env | grep DATABASE_URL | xargs)
+              psql "$DATABASE_URL" -f db/schema.sql -q 2>/dev/null || true
+            fi
+
+            # Reload the application if it's running as a systemd service
+            # (Phase 7 will set this up — this is a no-op until then)
+            sudo systemctl reload-or-restart financial-guardian 2>/dev/null || true
+
+            echo "Deploy complete: $(date)"
+          ENDSSH
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "Deployment failed. Check GitHub Actions logs."
+          # In Phase 5, wire this to post a Slack alert

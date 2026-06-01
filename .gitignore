@@ -62,3 +62,4 @@ dump.rdb
 # Temporary
 *.tmp
 .temp/
+finguardian-docs/
