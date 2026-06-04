@@ -1,7 +1,6 @@
-# Environment
+# Secrets — never commit
 .env
-.env.local
-.env.*.local
+config/google_service_account.json
 
 # Python
 __pycache__/
@@ -9,57 +8,37 @@ __pycache__/
 *$py.class
 *.so
 .Python
-env/
 venv/
+env/
 .venv/
-ENV/
-build/
-develop-eggs/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Logs
+logs/*.log
+logs/*.log.*
+
+# Distribution / packaging
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
+build/
 *.egg-info/
-.installed.cfg
-*.egg
+.eggs/
 
 # IDE
-.vscode/
 .idea/
+.vscode/
 *.swp
 *.swo
 *~
-.DS_Store
 
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
+.tox/
 
-# Logs
-logs/
-*.log
+# OS
+.DS_Store
+Thumbs.db
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-# Data
-data/
-*.csv
-*.json
-
-# Redis
-dump.rdb
-
-# Temporary
-*.tmp
-.temp/
 finguardian-docs/

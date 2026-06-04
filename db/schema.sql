@@ -4,6 +4,7 @@
 -- Safe to re-run: uses IF NOT EXISTS throughout
 -- ================================================
 
+-- Holdings: equities
 CREATE TABLE IF NOT EXISTS equity_holdings (
     id                  SERIAL PRIMARY KEY,
     ticker              VARCHAR(20)     NOT NULL,
@@ -26,6 +27,7 @@ CREATE TABLE IF NOT EXISTS equity_holdings (
 CREATE INDEX IF NOT EXISTS idx_equity_holdings_ticker ON equity_holdings(ticker);
 CREATE INDEX IF NOT EXISTS idx_equity_holdings_active ON equity_holdings(is_active);
 
+-- Holdings: mutual funds
 CREATE TABLE IF NOT EXISTS fund_holdings (
     id                  SERIAL PRIMARY KEY,
     fund_code           VARCHAR(50)     NOT NULL,
@@ -51,6 +53,7 @@ CREATE TABLE IF NOT EXISTS fund_holdings (
 CREATE INDEX IF NOT EXISTS idx_fund_holdings_code ON fund_holdings(fund_code);
 CREATE INDEX IF NOT EXISTS idx_fund_holdings_type ON fund_holdings(fund_type);
 
+-- Holdings: bonds (stub)
 CREATE TABLE IF NOT EXISTS bond_holdings (
     id                  SERIAL PRIMARY KEY,
     issuer_name         VARCHAR(200)    NOT NULL,
@@ -66,6 +69,7 @@ CREATE TABLE IF NOT EXISTS bond_holdings (
     updated_at          TIMESTAMPTZ     NOT NULL DEFAULT NOW()
 );
 
+-- Watchlist (synced from Google Sheets)
 CREATE TABLE IF NOT EXISTS watchlist (
     id                  SERIAL PRIMARY KEY,
     item_type           VARCHAR(20)     NOT NULL CHECK (item_type IN ('stock', 'fund')),
@@ -80,6 +84,7 @@ CREATE TABLE IF NOT EXISTS watchlist (
 CREATE INDEX IF NOT EXISTS idx_watchlist_active ON watchlist(is_active);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_watchlist_identifier ON watchlist(identifier, item_type);
 
+-- NAV history for mutual funds
 CREATE TABLE IF NOT EXISTS nav_history (
     id                  SERIAL PRIMARY KEY,
     fund_code           VARCHAR(50)     NOT NULL,
@@ -92,6 +97,7 @@ CREATE TABLE IF NOT EXISTS nav_history (
 );
 CREATE INDEX IF NOT EXISTS idx_nav_history_fund_date ON nav_history(fund_code, nav_date DESC);
 
+-- Price snapshots for equities (end of day)
 CREATE TABLE IF NOT EXISTS price_snapshots (
     id                  SERIAL PRIMARY KEY,
     ticker              VARCHAR(20)     NOT NULL,
@@ -107,6 +113,7 @@ CREATE TABLE IF NOT EXISTS price_snapshots (
 );
 CREATE INDEX IF NOT EXISTS idx_price_snapshots_ticker_date ON price_snapshots(ticker, snapshot_date DESC);
 
+-- News items storage
 CREATE TABLE IF NOT EXISTS news_items (
     id                  SERIAL PRIMARY KEY,
     source              VARCHAR(100)    NOT NULL,
@@ -126,6 +133,7 @@ CREATE INDEX IF NOT EXISTS idx_news_items_tickers   ON news_items USING GIN(rela
 CREATE INDEX IF NOT EXISTS idx_news_items_published ON news_items(published_at DESC);
 CREATE INDEX IF NOT EXISTS idx_news_items_urgent    ON news_items(is_urgent) WHERE is_urgent = TRUE;
 
+-- BSE/NSE corporate filings
 CREATE TABLE IF NOT EXISTS corporate_filings (
     id                  SERIAL PRIMARY KEY,
     filing_id           VARCHAR(100)    UNIQUE,
@@ -146,6 +154,7 @@ CREATE INDEX IF NOT EXISTS idx_filings_ticker    ON corporate_filings(ticker);
 CREATE INDEX IF NOT EXISTS idx_filings_published ON corporate_filings(published_at DESC);
 CREATE INDEX IF NOT EXISTS idx_filings_urgent    ON corporate_filings(is_urgent) WHERE is_urgent = TRUE;
 
+-- Market context snapshots
 CREATE TABLE IF NOT EXISTS market_context (
     id                      SERIAL PRIMARY KEY,
     context_date            DATE            NOT NULL,
@@ -169,6 +178,7 @@ CREATE TABLE IF NOT EXISTS market_context (
 );
 CREATE INDEX IF NOT EXISTS idx_market_context_date ON market_context(context_date DESC);
 
+-- Alerts log
 CREATE TABLE IF NOT EXISTS alerts (
     id                  SERIAL PRIMARY KEY,
     alert_type          VARCHAR(100)    NOT NULL,
@@ -189,6 +199,7 @@ CREATE INDEX IF NOT EXISTS idx_alerts_fired   ON alerts(fired_at DESC);
 CREATE INDEX IF NOT EXISTS idx_alerts_unacked ON alerts(is_acknowledged) WHERE is_acknowledged = FALSE;
 CREATE INDEX IF NOT EXISTS idx_alerts_ticker  ON alerts(related_ticker);
 
+-- Briefings log
 CREATE TABLE IF NOT EXISTS briefings (
     id                      SERIAL PRIMARY KEY,
     briefing_type           VARCHAR(20)     NOT NULL CHECK (briefing_type IN ('morning', 'eod')),
@@ -206,6 +217,7 @@ CREATE TABLE IF NOT EXISTS briefings (
 CREATE INDEX IF NOT EXISTS idx_briefings_date ON briefings(briefing_date DESC);
 CREATE INDEX IF NOT EXISTS idx_briefings_type ON briefings(briefing_type);
 
+-- Job execution log
 CREATE TABLE IF NOT EXISTS job_logs (
     id                  SERIAL PRIMARY KEY,
     job_name            VARCHAR(100)    NOT NULL,

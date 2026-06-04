@@ -1,6 +1,6 @@
-# Keywords that trigger urgent alerts when found in news text
-# Case-insensitive matching
-# Organized by severity
+# Keywords that trigger urgent alerts when found in news or filing text.
+# Matching is case-insensitive and substring-based.
+# Add new keywords here — no code changes required.
 
 critical:
   - "fraud"
@@ -18,11 +18,16 @@ critical:
   - "promoter pledge increase"
   - "NCLT"
   - "liquidation"
+  - "winding up"
+  - "attachment order"
+  - "money laundering"
+  - "CBI raid"
 
 warning:
   - "fund manager change"
   - "CEO resigned"
   - "CFO resigned"
+  - "MD resigned"
   - "promoter selling"
   - "SEBI notice"
   - "income tax raid"
@@ -33,3 +38,8 @@ warning:
   - "open offer"
   - "delisting"
   - "rating downgrade"
+  - "credit watch"
+  - "negative outlook"
+  - "loan default"
+  - "NPA"
+  - "RBI action"
