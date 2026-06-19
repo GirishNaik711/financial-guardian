@@ -48,3 +48,5 @@ structlog==24.1.0
 pytest
 pytest-asyncio
 responses
+yfinance==0.2.37
+anthropic>=0.23.1
